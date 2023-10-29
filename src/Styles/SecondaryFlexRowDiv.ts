@@ -4,7 +4,7 @@ export const SecondaryFlexRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4e6983;
+  background-color: #677f94;
   width: 100%;
   padding: 12px;
 

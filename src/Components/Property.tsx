@@ -57,9 +57,10 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
   padding: 10px;
-  height: 20vh;
+  height: 15vh;
+  margin-bottom: 10px;
 
   h4 {
     margin-bottom: 5px;

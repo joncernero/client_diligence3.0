@@ -4,15 +4,21 @@ import APIURL from '../Utilities/Environments';
 import styled from 'styled-components';
 import { Unit } from '../Types/Unit';
 import AddUnits from './AddUnits';
+import AddVariants from './AddVariants';
 import { Spinner } from '../Styles/Spinner';
 import * as MdIcons from 'react-icons/md';
 import { FlexRow } from '../Styles/FlexRowDiv';
 import { CSVLink, CSVDownload } from 'react-csv';
+import ScrollToTop from './ScrollToTop';
+import * as FaIcons from 'react-icons/fa';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Units = () => {
   const [allUnits, setAllUnits] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [updateActive, setUpdateActive] = useState(false);
+  const [addUnitActive, setAddUnitActive] = useState(false);
+  const [addVariantActive, setAddVariantActive] = useState(false);
   const { id } = useParams();
 
   const FetchAllUnits = async () => {
@@ -30,9 +36,7 @@ const Units = () => {
 
       const propertyUnits = await response.json();
       setAllUnits(propertyUnits.data.propertyUnits);
-      setIsLoading(false);
     } catch (err) {
-      setIsLoading(false);
       console.log(err);
     }
   };
@@ -41,6 +45,16 @@ const Units = () => {
     setIsLoading(true);
     FetchAllUnits();
   }, []);
+
+  const ToggleAddUnit = () => {
+    setAddUnitActive(!addUnitActive);
+    window.scrollTo(0, 0);
+  };
+
+  const ToggleAddVariant = () => {
+    setAddVariantActive(!addVariantActive);
+    window.scrollTo(0, 0);
+  };
 
   const ToggleUpdateOn = () => {
     setUpdateActive(!updateActive);
@@ -52,9 +66,19 @@ const Units = () => {
         <td>{!unit.unit_no ? '-' : unit.unit_no}</td>
         <td>{unit.unit_type}</td>
         <td>{unit.bldg_no}</td>
-        <td>{!unit.isstandard ? <MdIcons.MdClear /> : <MdIcons.MdDone />}</td>
         <td>
-          <MdIcons.MdUpdate />
+          {!unit.isstandard ? (
+            <AiFillCloseCircle className='red' />
+          ) : (
+            <FaIcons.FaCheckCircle className='green' />
+          )}
+        </td>
+        <td>
+          <MdIcons.MdAddCircle
+            onClick={() => {
+              ToggleAddVariant();
+            }}
+          />
         </td>
       </tr>
     ));
@@ -69,20 +93,35 @@ const Units = () => {
 
   const DownloadLink = {
     color: '#ffffff',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bolder',
   };
 
   return (
     <>
+      <ScrollToTop />
       <FlexRow>
         <h3>Property Units</h3>
-        <CSVLink
-          data={csvData}
-          filename={`property_${id}_units.csv`}
-          style={DownloadLink}>
-          <MdIcons.MdFileDownload />
-        </CSVLink>
+        <div>
+          {addUnitActive ? (
+            <AddUnits
+              ToggleAddUnit={ToggleAddUnit}
+              FetchAllUnits={FetchAllUnits}
+            />
+          ) : null}
+          <Button
+            onClick={() => {
+              ToggleAddUnit();
+            }}>
+            <MdIcons.MdAddCircle />
+          </Button>
+          <CSVLink
+            data={csvData}
+            filename={`property_${id}_units.csv`}
+            style={DownloadLink}>
+            <MdIcons.MdFileDownload />
+          </CSVLink>
+        </div>
       </FlexRow>
       <Table>
         <thead>
@@ -91,7 +130,7 @@ const Units = () => {
             <th>Type</th>
             <th>Bldg.</th>
             <th>Standard</th>
-            <th>Update</th>
+            <th>Variant</th>
           </tr>
         </thead>
         <tbody>{UnitList()}</tbody>
@@ -106,8 +145,8 @@ export const Button = styled.button`
   background: none;
   color: white;
   border: none;
-  font-size: 20px;
-
+  font-size: 25px;
+  margin: 0 15px;
   &:hover {
     background: none;
     color: #08f42d;
@@ -119,26 +158,51 @@ export const Table = styled.table`
   min-height: 100vh;
   border-collapse: collapse;
   border-spacing: 0;
+  margin-top: 95px;
 
   thead {
+    position: fixed;
     background-color: #4e6983;
+    width: 100%;
   }
 
   thead th {
     color: white;
     padding: 10px;
-    font-size: 12px;
+    font-size: 15px;
   }
 
-  tbody td {
-    text-align: center;
-    font-size: 11px;
-    font-weight: bold;
+  tbody {
+    overflow: scroll;
+    width: 100%;
   }
 
   td {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
     padding: 20px;
   }
+
+  td {
+    .red {
+      color: #ff8080;
+    }
+
+    .green {
+      color: #7fbe7f;
+    }
+  }
+
+  td:nth-child(4) {
+    font-size: 22px;
+  }
+
+  td:nth-child(5) {
+    font-size: 22px;
+    color: #4e6983;
+  }
+
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }

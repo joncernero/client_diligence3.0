@@ -13,10 +13,9 @@ function Header() {
 
   return (
     <>
-      <NavCon>
-        <FaIcons.FaBars onClick={() => toggleNavBar()} />
+      <HeadDiv>
         <h1>diligence</h1>
-      </NavCon>
+      </HeadDiv>
       {/* {navBarActive ? <Navigation toggleNavBar={toggleNavBar} /> : null} */}
     </>
   );
@@ -24,20 +23,19 @@ function Header() {
 
 export default Header;
 
-const NavCon = styled.div`
+const HeadDiv = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
   height: 5vh;
-  padding: 10px;
-  gap: 15px;
+  width: 100%;
+  background-color: #ffffff;
 
   h1 {
     font-size: 15px;
   }
-`;
-
-const MenuBars = styled(FaIcons.FaBars)`
-  height: 20px;
-  width: 20px;
 `;

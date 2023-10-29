@@ -74,7 +74,6 @@ export const Container = styled.div`
   p {
     text-align: center;
     font-weight: bold;
-    padding: 10px 0;
   }
 `;
 
@@ -85,7 +84,7 @@ export const PicDiv = styled.div`
   text-align: center;
 
   section {
-    height: 100px;
+    height: 125px;
     width: 150px;
   }
 `;

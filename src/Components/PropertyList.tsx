@@ -7,6 +7,8 @@ import { Property } from '../Types/Property';
 import * as MdIcons from 'react-icons/md';
 import * as AiIcons from 'react-icons/ai';
 import { Spinner } from '../Styles/Spinner';
+import { FlexRow } from '../Styles/FlexRowDiv';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const pageSize = 10;
@@ -75,67 +77,59 @@ const PropertyList = () => {
 
   const PropertyList = () => {
     return properties.map((property: Property, index) => (
-      <tr key={index}>
-        <td onClick={() => HandleSelect(property.id)}>{property.prop_name}</td>
-        <td>{`${property.prop_city}, ${property.prop_state}`}</td>
-        <td>{property.prop_status}</td>
-        <td>{property.prop_pm}</td>
-        <td></td>
-        <td>
+      <ul key={index}>
+        <li onClick={() => HandleSelect(property.id)}>{property.prop_name}</li>
+        <li>{property.prop_status}</li>
+        <li>
           <MdIcons.MdUpdate />
-        </td>
-      </tr>
+        </li>
+      </ul>
     ));
   };
 
   return (
-    <>
+    <Container>
       {createActive ? (
         <AddProperty
           FetchProperties={FetchProperties}
           ToggleCreateOn={ToggleCreateOn}
         />
       ) : null}
-
-      <Table>
-        <thead>
-          <tr>
-            <th>Property Name</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>PM</th>
-            <th></th>
-            <th>
-              <button
-                onClick={() => {
-                  ToggleCreateOn();
-                }}>
-                <MdIcons.MdAddCircle />
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>{PropertyList()}</tbody>
-      </Table>
+      <FlexRow>
+        <h3>Property Name</h3>
+        <h4>Status</h4>
+        <AddButton
+          onClick={() => {
+            ToggleCreateOn();
+          }}>
+          <MdIcons.MdAddCircle />
+        </AddButton>
+      </FlexRow>
+      <PropListContainer>
+        <>{PropertyList()}</>
+      </PropListContainer>
       <PgButtonDiv>
         <button onClick={handlePrevPage} disabled={currentPage === 1}>
           Prev 10
         </button>
         <button onClick={handleNextPage}>Next 10</button>
       </PgButtonDiv>
-    </>
+    </Container>
   );
 };
 
 export default PropertyList;
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const PgButtonDiv = styled.div`
   display: flex;
   justify-content: center;
-  gap: 10px;
   margin-top: 15px;
+  gap: 10px;
 
   button {
     background: #ffffff;
@@ -156,95 +150,45 @@ export const PgButtonDiv = styled.div`
   }
 `;
 
-export const Table = styled.table`
-  table-layout: fixed;
+export const AddButton = styled.div`
+  background: none;
+  color: white;
+  border: none;
+  font-size: 20px;
+  margin-right: 10px;
+
+  &:hover {
+    background: none;
+    color: #08f42d;
+  }
+`;
+
+export const PropListContainer = styled.div`
+  /* position: relative; */
+  display: flex;
+  flex: 3;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  margin-top: 105px;
 
-  thead {
-    height: 10px;
-    background-color: #032a4e;
-  }
+  ul {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    padding: 20px 0;
 
-  thead th {
-    color: white;
-    padding: 15px;
-  }
-
-  thead th:nth-child(1) {
-    width: 40%;
-    text-align: left;
-  }
-
-  thead th:nth-child(2) {
-    width: 20%;
-    text-align: center;
-  }
-
-  thead th:nth-child(3) {
-    width: 15%;
-    text-align: center;
-  }
-
-  thead th:nth-child(4) {
-    width: 20%;
-    text-align: center;
-  }
-
-  thead th:nth-child(5) {
-    width: 0%;
-  }
-
-  thead th:nth-child(6) {
-    width: 10%;
-    text-align: center;
-  }
-
-  th:nth-child(2),
-  th:nth-child(4),
-  td:nth-child(2),
-  td:nth-child(4),
-  th:nth-child(5),
-  td:nth-child(5) {
-    @media screen and (max-width: 400px) {
-      display: none;
+    li:nth-child(1) {
+      margin-left: 15px;
+      width: 50%;
     }
-  }
-
-  th button {
-    background: none;
-    color: white;
-    border: none;
-    font-size: 20px;
-
-    &:hover {
-      background: none;
-      color: #08f42d;
+    li:nth-child(2) {
+      text-align: center;
+      width: 20%;
     }
-  }
-
-  tbody tr {
-    &:hover {
-      background: #c2abe1;
-      color: #ffffff;
+    li:nth-child(3) {
+      text-align: right;
+      width: 20%;
     }
-    width: 80%;
-  }
-
-  tbody td {
-    padding: 15px;
-    width: auto;
-    color: black;
-  }
-
-  td:not(:first-child) {
-    text-align: center;
-  }
-
-  td button {
-    background: none;
-    border: none;
   }
 `;

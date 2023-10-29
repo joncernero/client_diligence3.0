@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   background-color: white;
   position: absolute;
   z-index: 75;
@@ -12,20 +11,19 @@ export const StyledModal = styled.div`
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  overflow-y: scroll;
+  overflow-y: auto;
 
   form {
     color: #283747;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: left;
+    gap: 5px;
+    width: 100%;
+    padding: 10px;
   }
 
-  div {
-    align-self: center;
-    margin: 10px;
-  }
   label {
     margin-bottom: 0.5em;
     color: #283747;
@@ -45,16 +43,22 @@ export const StyledModal = styled.div`
   }
 
   select {
+    box-sizing: border-box;
     padding: 0.5em;
     color: #283747;
     background: #eaecee;
-    border: 1px solid #283747;
-    border-radius: 3px;
     width: 100%;
     margin-bottom: 1em;
+
+    option {
+      text-align: center;
+      background-color: #ffffff;
+      font-weight: bold;
+    }
   }
 
   button {
+    align-self: center;
     height: 45px;
     width: 80%;
     color: white;

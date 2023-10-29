@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { GlobalStyle } from './Styles/Global';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { User } from './Types/User';
-import { Property } from './Types/Property';
-import Header from './Components/Header';
 import Home from './Pages/Home';
+import Header from './Components/Header';
+import Navigation from './Components/Navigation';
 import Login from './Pages/Login';
-// import Routes from './Routes/Index';
 import PropertyDetailPage from './Pages/PropertyDetailPage';
 import Units from './Components/Units';
-import styled from 'styled-components';
-import { Container } from './Components/Navigation';
+import Variants from './Components/Variants';
 
 type Props = {
   sessionToken?: string | null;
@@ -56,7 +54,9 @@ const App = (props: Props) => {
         <Route path='/' element={<Home />} />
         <Route path='/properties/:id' element={<PropertyDetailPage />} />
         <Route path='/properties/:id/units' element={<Units />} />
+        <Route path='/properties/:id/variants' element={<Variants />} />
       </Routes>
+      <Navigation />
     </Router>
   );
 };

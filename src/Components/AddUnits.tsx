@@ -6,7 +6,8 @@ import { FlexRow } from '../Styles/FlexRowDiv';
 import * as AiIcons from 'react-icons/ai';
 
 type Props = {
-  ToggleUnitsOn: Function;
+  ToggleAddUnit: Function;
+  FetchAllUnits: Function;
 };
 
 const AddUnits = (props: Props) => {
@@ -35,6 +36,8 @@ const AddUnits = (props: Props) => {
       .then((res) => res.json())
       .then(() => {
         setProp_id(0), setUnit_type(''), setBldg_no(''), setNum_rows(0);
+        props.ToggleAddUnit();
+        props.FetchAllUnits();
       })
       .catch((error) => console.log(error));
   };
@@ -45,7 +48,7 @@ const AddUnits = (props: Props) => {
         <h3>Add Units</h3>
         <ModalClose
           onClick={() => {
-            props.ToggleUnitsOn();
+            props.ToggleAddUnit();
           }}>
           <AiIcons.AiFillCloseCircle />
         </ModalClose>
@@ -61,7 +64,7 @@ const AddUnits = (props: Props) => {
           />
         </div>
         <div>
-          <label htmlFor='bldg_no'>Building No:</label>
+          <label htmlFor='bldg_no'>Building#</label>
           <input
             name='bldg_no'
             type='text'

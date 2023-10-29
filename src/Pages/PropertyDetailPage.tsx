@@ -4,7 +4,8 @@ import APIURL from '../Utilities/Environments';
 import DisplayedProp from '../Components/Property';
 import styled from 'styled-components';
 import AddPictures from '../Components/AddPictures';
-import UnitList from '../Components/PropUnitList';
+import PropRollUp from '../Components/PropRollUp';
+
 import Pictures from '../Components/Pictures';
 
 function PropertyDetailPage() {
@@ -32,6 +33,7 @@ function PropertyDetailPage() {
 
   const TogglePicturesOn = () => {
     setPictureActive(!pictureActive);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -47,7 +49,7 @@ function PropertyDetailPage() {
       <Container>
         <DisplayedProp DisplayedProperty={DisplayedProperty} />
         <Pictures TogglePicturesOn={TogglePicturesOn} />
-        <UnitList />
+        <PropRollUp />
       </Container>
     </>
   );
@@ -58,4 +60,5 @@ export default PropertyDetailPage;
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 95px;
 `;

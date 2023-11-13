@@ -11,81 +11,87 @@ type Props = {
 
 function DisplayedProp(props: Props) {
   return (
-    <div>
+    <Container>
       <FlexRow>
         <h3>{props.DisplayedProperty.prop_name}</h3>
       </FlexRow>
-      <InfoContainer>
-        <TopRow>
+      <PropertyInfo>
+        <div className='one'>
+          <h4>Address:</h4>
           <div>
-            <h4>Address:</h4>
-            <div>
-              <p>{props.DisplayedProperty.prop_streetaddress}</p>
-              <Address2ndRow>
-                <p>
-                  {props.DisplayedProperty.prop_city},
-                  {props.DisplayedProperty.prop_state}
-                </p>
-                <p>{props.DisplayedProperty.prop_zip}</p>
-              </Address2ndRow>
-            </div>
+            <p>{props.DisplayedProperty.prop_streetaddress}</p>
+            <p>
+              {props.DisplayedProperty.prop_city},
+              {props.DisplayedProperty.prop_state}&nbsp;
+              {props.DisplayedProperty.prop_zip}
+            </p>
           </div>
-          <Status>
-            <h4>Status:</h4>
-            <p>{props.DisplayedProperty.prop_status}</p>
-          </Status>
-        </TopRow>
-        <BottomRow>
-          <div>
-            <h4>Project Manager:</h4>
-            <p>{props.DisplayedProperty.prop_pm}</p>
-          </div>
-          <div>
-            <h4>Created By:</h4>
-            <p>{props.DisplayedProperty.prop_createdby}</p>
-          </div>
-        </BottomRow>
-      </InfoContainer>
-    </div>
+        </div>
+        <div className='four'>
+          <h4>Status:</h4>
+          <p>{props.DisplayedProperty.prop_status}</p>
+        </div>
+        <div className='three'>
+          <h4>Project Manager:</h4>
+          <p>{props.DisplayedProperty.prop_pm}&nbsp;&nbsp;</p>
+        </div>
+        <div className='two'>
+          <h4>Created By:</h4>
+          <p>{props.DisplayedProperty.prop_createdby}</p>
+        </div>
+      </PropertyInfo>
+    </Container>
   );
 }
 
 export default DisplayedProp;
 
-export const InfoContainer = styled.div`
+export const Container = styled.div`
   color: #283747;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px;
-  height: 15vh;
-  margin-bottom: 10px;
+`;
 
-  h4 {
-    margin-bottom: 5px;
+export const PropertyInfo = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+
+  .one,
+  .two,
+  .three,
+  .four {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
   }
-`;
 
-export const TopRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-`;
-export const BottomRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-`;
+  .one,
+  .three {
+    justify-self: right;
+  }
 
-export const Address2ndRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
+  .two,
+  .four {
+    justify-self: center;
+  }
 
-export const Status = styled.div`
-  p {
-    color: green;
+  .four {
+    color: ;
+  }
+
+  .one {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  .two {
+    grid-area: 1 / 2 / 2 / 3;
+  }
+
+  .three {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  .four {
+    grid-area: 2 / 2 / 3 / 2;
   }
 `;

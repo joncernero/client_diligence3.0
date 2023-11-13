@@ -6,7 +6,7 @@ export const SecondaryFlexRow = styled.div`
   align-items: center;
   background-color: #677f94;
   width: 100%;
-  padding: 12px;
+  padding: 15px;
 
   h3 {
     font-size: 15px;

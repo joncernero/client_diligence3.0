@@ -9,6 +9,7 @@ import Login from './Pages/Login';
 import PropertyDetailPage from './Pages/PropertyDetailPage';
 import Units from './Components/Units';
 import Variants from './Components/Variants';
+import styled from 'styled-components';
 
 type Props = {
   sessionToken?: string | null;
@@ -47,18 +48,46 @@ const App = (props: Props) => {
   };
 
   return (
-    <Router>
-      <GlobalStyle />
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/properties/:id' element={<PropertyDetailPage />} />
-        <Route path='/properties/:id/units' element={<Units />} />
-        <Route path='/properties/:id/variants' element={<Variants />} />
-      </Routes>
-      <Navigation />
-    </Router>
+    <Container>
+      <Router>
+        <GlobalStyle />
+        <div className='item-a'>
+          <Header />
+        </div>
+        <div className='item-b'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/properties/:id' element={<PropertyDetailPage />} />
+            <Route path='/properties/:id/units' element={<Units />} />
+            <Route path='/properties/:id/variants' element={<Variants />} />
+          </Routes>
+        </div>
+        <div className='item-c'>
+          <Navigation />
+        </div>
+      </Router>
+    </Container>
   );
 };
 
 export default App;
+
+export const Container = styled.div`
+  display: grid;
+  grid-template-areas: 'header header header' 'main main main' 'footer footer footer';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 5vh 85vh 10vh;
+
+  .item-a {
+    grid-area: 1 / 1 / 2 / 4;
+  }
+
+  .item-b {
+    grid-area: 2 / 1 / 2 / 4;
+  }
+
+  .item-c {
+    grid-area: 3 / 1 / 4 / 4;
+    z-index: 1;
+  }
+`;

@@ -5,7 +5,6 @@ import DisplayedProp from '../Components/Property';
 import styled from 'styled-components';
 import AddPictures from '../Components/AddPictures';
 import PropRollUp from '../Components/PropRollUp';
-
 import Pictures from '../Components/Pictures';
 
 function PropertyDetailPage() {
@@ -47,9 +46,15 @@ function PropertyDetailPage() {
         <AddPictures TogglePicturesOn={TogglePicturesOn} />
       ) : null}
       <Container>
-        <DisplayedProp DisplayedProperty={DisplayedProperty} />
-        <Pictures TogglePicturesOn={TogglePicturesOn} />
-        <PropRollUp />
+        <div className='top'>
+          <DisplayedProp DisplayedProperty={DisplayedProperty} />
+        </div>
+        <div className='middle'>
+          <Pictures TogglePicturesOn={TogglePicturesOn} />
+        </div>
+        <div className='bottom'>
+          <PropRollUp />
+        </div>
       </Container>
     </>
   );
@@ -58,7 +63,17 @@ function PropertyDetailPage() {
 export default PropertyDetailPage;
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 95px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 24vh 20vh 50vh;
+
+  .top {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  .middle {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+  .bottom {
+    grid-area: 3 / 1 / 4 / 2;
+  }
 `;

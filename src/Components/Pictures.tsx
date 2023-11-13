@@ -42,13 +42,15 @@ const Pictures = (props: Props) => {
             {/* <PicWindow pic_link={picture.pic_link} /> */}
             <section>
               <Picture src={picture.pic_link} cross-origin={'anonymous'} />
-              <h6>{picture.pic_name}</h6>
+              <p>{picture.pic_name}</p>
             </section>
           </PicDiv>
         );
       })
     ) : (
-      <p>'No Pictures Available'</p>
+      <MessageDiv>
+        <p className='none'>'No Pictures Uploaded'</p>
+      </MessageDiv>
     );
   };
 
@@ -71,22 +73,35 @@ const Pictures = (props: Props) => {
 export default Pictures;
 
 export const Container = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5.5vh 14.5vh;
+
+  .top {
+    grid-area: ;
+  }
+
   p {
     text-align: center;
     font-weight: bold;
+    font-size: 12px;
   }
+`;
+
+export const MessageDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  /* padding: 20px 0; */
 `;
 
 export const PicDiv = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 15px 0;
-  text-align: center;
-
-  section {
-    height: 125px;
-    width: 150px;
-  }
+  align-items: center;
+  padding: 5px 5px;
 `;
 
 export const Picture = styled.img.attrs((props) => ({
@@ -113,5 +128,7 @@ export const Button = styled.button`
 export const HSlider = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   overflow-x: scroll;
 `;

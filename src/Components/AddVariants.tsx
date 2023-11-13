@@ -6,7 +6,7 @@ import { FlexRow } from '../Styles/FlexRowDiv';
 import * as AiIcons from 'react-icons/ai';
 
 type Props = {
-  ToggleVariantsOn: Function;
+  ToggleAddVariant: Function;
 };
 
 const AddVariants = (props: Props) => {
@@ -41,7 +41,7 @@ const AddVariants = (props: Props) => {
           setVariant_note('');
       })
       .then(() => {
-        props.ToggleVariantsOn();
+        props.ToggleAddVariant();
       })
       .catch((error) => console.log(error));
   };
@@ -71,7 +71,7 @@ const AddVariants = (props: Props) => {
         <h3>Add Variant</h3>
         <ModalClose
           onClick={() => {
-            props.ToggleVariantsOn();
+            props.ToggleAddVariant();
           }}>
           <AiIcons.AiFillCloseCircle />
         </ModalClose>

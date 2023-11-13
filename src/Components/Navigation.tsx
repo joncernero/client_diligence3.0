@@ -28,25 +28,19 @@ const Navigation = () => {
 export default Navigation;
 
 export const FooterDiv = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  height: 8vh;
+  height: 100%;
   width: 100%;
-  /* padding: 5px; */
-  /* gap: 10px; */
-
   color: #ffffff;
 
   .right,
   .left,
   .center {
     background-color: #032a4e;
-    width: 100%;
+    width: 90%;
     height: 100%;
   }
 

@@ -26,8 +26,8 @@ const Div = styled.div`
   }
   a {
     position: fixed;
-    bottom: 20px;
-    right: 10px;
+    bottom: 75px;
+    right: 40px;
     background-color: var(--secondary-color);
     padding: 1rem;
     border-radius: 100%;

@@ -15,6 +15,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 
 const Units = () => {
   const [allUnits, setAllUnits] = useState([]);
+  const [propName, setPropName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [updateActive, setUpdateActive] = useState(false);
   const [addUnitActive, setAddUnitActive] = useState(false);
@@ -34,8 +35,10 @@ const Units = () => {
         throw new Error('Network response was not ok');
       }
 
-      const propertyUnits = await response.json();
-      setAllUnits(propertyUnits.data.propertyUnits);
+      const propertyInfo = await response.json();
+      setPropName(propertyInfo.data.property.prop_name);
+      setAllUnits(propertyInfo.data.propertyUnits);
+      console.log(propertyInfo);
     } catch (err) {
       console.log(err);
     }
@@ -63,23 +66,23 @@ const Units = () => {
   const UnitList = () => {
     return allUnits.map((unit: Unit, index) => (
       <tr key={index}>
-        <td>{!unit.unit_no ? '-' : unit.unit_no}</td>
-        <td>{unit.unit_type}</td>
-        <td>{unit.bldg_no}</td>
-        <td>
+        <TD>{!unit.unit_no ? '-' : unit.unit_no}</TD>
+        <TD>{unit.unit_type}</TD>
+        <TD>{unit.bldg_no}</TD>
+        <TD>
           {!unit.isstandard ? (
             <AiFillCloseCircle className='red' />
           ) : (
             <FaIcons.FaCheckCircle className='green' />
           )}
-        </td>
-        <td>
+        </TD>
+        <TD>
           <MdIcons.MdAddCircle
             onClick={() => {
               ToggleAddVariant();
             }}
           />
-        </td>
+        </TD>
       </tr>
     ));
   };
@@ -100,46 +103,71 @@ const Units = () => {
   return (
     <>
       <ScrollToTop />
-      <FlexRow>
-        <h3>Property Units</h3>
-        <div>
-          {addUnitActive ? (
-            <AddUnits
-              ToggleAddUnit={ToggleAddUnit}
-              FetchAllUnits={FetchAllUnits}
-            />
-          ) : null}
-          <Button
-            onClick={() => {
-              ToggleAddUnit();
-            }}>
-            <MdIcons.MdAddCircle />
-          </Button>
-          <CSVLink
-            data={csvData}
-            filename={`property_${id}_units.csv`}
-            style={DownloadLink}>
-            <MdIcons.MdFileDownload />
-          </CSVLink>
+      <UnitContainer>
+        <div className='header'>
+          <FlexRow>
+            <h3>Units: {`${propName}`}</h3>
+            <div>
+              {addUnitActive ? (
+                <AddUnits
+                  ToggleAddUnit={ToggleAddUnit}
+                  FetchAllUnits={FetchAllUnits}
+                />
+              ) : null}
+              <Button
+                onClick={() => {
+                  ToggleAddUnit();
+                }}>
+                <MdIcons.MdAddCircle />
+              </Button>
+              <CSVLink
+                data={csvData}
+                filename={`property_${id}_units.csv`}
+                style={DownloadLink}>
+                <MdIcons.MdFileDownload />
+              </CSVLink>
+            </div>
+          </FlexRow>
         </div>
-      </FlexRow>
-      <Table>
-        <thead>
-          <tr>
-            <th>Unit#</th>
-            <th>Type</th>
-            <th>Bldg.</th>
-            <th>Standard</th>
-            <th>Variant</th>
-          </tr>
-        </thead>
-        <tbody>{UnitList()}</tbody>
-      </Table>
+        {addVariantActive ? (
+          <AddVariants ToggleAddVariant={ToggleAddVariant} />
+        ) : null}
+        <table>
+          <TableHeader>
+            <tr>
+              <th>Unit#</th>
+              <th>Type</th>
+              <th>Bldg.</th>
+              <th>Standard</th>
+              <th>Variant</th>
+            </tr>
+          </TableHeader>
+          <TableBody>{UnitList()}</TableBody>
+        </table>
+      </UnitContainer>
     </>
   );
 };
 
 export default Units;
+
+export const UnitContainer = styled.div`
+  display: grid;
+  grid-template-areas:
+    'header'
+    'main';
+
+  .header {
+    grid-area: header;
+  }
+  .main {
+    grid-area: main;
+  }
+
+  table {
+    width: 100%;
+  }
+`;
 
 export const Button = styled.button`
   background: none;
@@ -153,57 +181,73 @@ export const Button = styled.button`
   }
 `;
 
-export const Table = styled.table`
+export const TableHeader = styled.thead`
+  display: table;
   width: 100%;
-  min-height: 100vh;
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin-top: 95px;
-
-  thead {
-    position: fixed;
-    background-color: #4e6983;
+  table-layout: fixed;
+  background-color: #4e6983;
+  color: white;
+  tr {
+    height: 40px;
     width: 100%;
-  }
+    th {
+      width: 33%;
 
-  thead th {
-    color: white;
-    padding: 10px;
-    font-size: 15px;
-  }
-
-  tbody {
-    overflow: scroll;
-    width: 100%;
-  }
-
-  td {
-    text-align: center;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 20px;
-  }
-
-  td {
-    .red {
-      color: #ff8080;
-    }
-
-    .green {
-      color: #7fbe7f;
+      &:last-child {
+        //make room for scrollbar
+        width: 36%;
+      }
     }
   }
+`;
 
-  td:nth-child(4) {
+export const TableBody = styled.tbody`
+  display: block;
+  max-height: calc((80% - 45px)); //has to be specific
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: absolute; //in relation to a parent
+  > tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    height: 40px;
+    cursor: pointer;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  padding-bottom: 25px;
+`;
+
+export const TD = styled.td`
+  padding: 10px 15px;
+  border-top: none;
+  border-bottom: 1px solid #f1f1f1;
+  width: 33%;
+  max-width: 33%;
+  word-break: break-all;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+
+  &:nth-child(4) {
     font-size: 22px;
   }
-
-  td:nth-child(5) {
+  &:nth-child(5) {
     font-size: 22px;
     color: #4e6983;
   }
+  &:last-child {
+    //make room for scrollbar
+    width: 36%;
+  }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
+  .red {
+    color: #ff8080;
+  }
+
+  .green {
+    color: #7fbe7f;
   }
 `;

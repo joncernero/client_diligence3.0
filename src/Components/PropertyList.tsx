@@ -64,7 +64,9 @@ const PropertyList = () => {
   };
 
   const handleNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    if (properties.length === pageSize) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const handlePrevPage = () => {
@@ -95,16 +97,18 @@ const PropertyList = () => {
           ToggleCreateOn={ToggleCreateOn}
         />
       ) : null}
-      <FlexRow>
-        <h3>Property Name</h3>
-        <h4>Status</h4>
-        <AddButton
-          onClick={() => {
-            ToggleCreateOn();
-          }}>
-          <MdIcons.MdAddCircle />
-        </AddButton>
-      </FlexRow>
+      <TitleDiv>
+        <FlexRow>
+          <h3>Property Name</h3>
+          <h4>Status</h4>
+          <AddButton
+            onClick={() => {
+              ToggleCreateOn();
+            }}>
+            <MdIcons.MdAddCircle />
+          </AddButton>
+        </FlexRow>
+      </TitleDiv>
       <PropListContainer>
         <>{PropertyList()}</>
       </PropListContainer>
@@ -121,14 +125,20 @@ const PropertyList = () => {
 export default PropertyList;
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 7.5vh 70vh 7.5vh;
+`;
+
+export const TitleDiv = styled.div`
+  grid-area: 1 / 1 / 1 / 2;
 `;
 
 export const PgButtonDiv = styled.div`
+  grid-area: 3 / 1 / 3 / 2;
+  place-self: center;
   display: flex;
   justify-content: center;
-  margin-top: 15px;
   gap: 10px;
 
   button {
@@ -164,19 +174,15 @@ export const AddButton = styled.div`
 `;
 
 export const PropListContainer = styled.div`
-  /* position: relative; */
+  grid-area: 2 / 1 / 3 / 2;
   display: flex;
-  flex: 3;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  margin-top: 105px;
 
   ul {
     display: flex;
     flex-direction: row;
     list-style-type: none;
-    padding: 20px 0;
+    padding: 15px 0;
 
     li:nth-child(1) {
       margin-left: 15px;

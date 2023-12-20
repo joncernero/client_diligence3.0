@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import APIURL from '../Utilities/Environments';
 import AddProperty from './AddProperties';
+import UpdateProperty from './UpdateProperty';
 import { Property } from '../Types/Property';
 import * as MdIcons from 'react-icons/md';
 import * as AiIcons from 'react-icons/ai';
 import { Spinner } from '../Styles/Spinner';
 import { FlexRow } from '../Styles/FlexRowDiv';
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const pageSize = 10;
 
@@ -18,6 +17,18 @@ const PropertyList = () => {
   const [properties, setProperties] = useState([]);
   const [createActive, setCreateActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [updateActive, setUpdateActive] = useState(false);
+  const [propertyToUpdate, setPropertyToUpdate] = useState({
+    id: 0,
+    prop_name: '',
+    prop_streetaddress: '',
+    prop_city: '',
+    prop_state: '',
+    prop_zip: '',
+    prop_createdby: '',
+    prop_status: '',
+    prop_pm: '',
+  });
 
   let navigate = useNavigate();
 
@@ -47,13 +58,17 @@ const PropertyList = () => {
   useEffect(() => {
     setIsLoading(true);
     FetchProperties(currentPage);
-
-    const showLoading = () => {
-      if (isLoading) {
-        return <Spinner />;
-      }
-    };
   }, [currentPage]);
+
+  const showLoading = () => {
+    if (isLoading) {
+      return <Spinner />;
+    }
+  };
+
+  const EditProperty = (property: Property) => {
+    setPropertyToUpdate(property);
+  };
 
   const HandleSelect = (id: number) => {
     try {
@@ -63,13 +78,13 @@ const PropertyList = () => {
     }
   };
 
-  const handleNextPage = () => {
+  const HandleNextPage = () => {
     if (properties.length === pageSize) {
       setCurrentPage(currentPage + 1);
     }
   };
 
-  const handlePrevPage = () => {
+  const HandlePrevPage = () => {
     setCurrentPage(currentPage - 1);
   };
 
@@ -77,12 +92,21 @@ const PropertyList = () => {
     setCreateActive(!createActive);
   };
 
+  const ToggleEditOn = () => {
+    setUpdateActive(!updateActive);
+    window.scrollTo(0, 0);
+  };
+
   const PropertyList = () => {
     return properties.map((property: Property, index) => (
       <ul key={index}>
         <li onClick={() => HandleSelect(property.id)}>{property.prop_name}</li>
         <li>{property.prop_status}</li>
-        <li>
+        <li
+          onClick={() => {
+            ToggleEditOn();
+            EditProperty(property);
+          }}>
           <MdIcons.MdUpdate />
         </li>
       </ul>
@@ -90,35 +114,48 @@ const PropertyList = () => {
   };
 
   return (
-    <Container>
-      {createActive ? (
-        <AddProperty
-          FetchProperties={FetchProperties}
-          ToggleCreateOn={ToggleCreateOn}
-        />
-      ) : null}
-      <TitleDiv>
-        <FlexRow>
-          <h3>Property Name</h3>
-          <h4>Status</h4>
-          <AddButton
-            onClick={() => {
-              ToggleCreateOn();
-            }}>
-            <MdIcons.MdAddCircle />
-          </AddButton>
-        </FlexRow>
-      </TitleDiv>
-      <PropListContainer>
-        <>{PropertyList()}</>
-      </PropListContainer>
-      <PgButtonDiv>
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          Prev 10
-        </button>
-        <button onClick={handleNextPage}>Next 10</button>
-      </PgButtonDiv>
-    </Container>
+    <>
+      {showLoading()}
+      <>
+        <Container>
+          {createActive ? (
+            <AddProperty
+              FetchProperties={FetchProperties}
+              ToggleCreateOn={ToggleCreateOn}
+            />
+          ) : null}
+          <TitleDiv>
+            <FlexRow>
+              <h3>Property Name</h3>
+              <h4>Status</h4>
+              <AddButton
+                onClick={() => {
+                  ToggleCreateOn();
+                }}>
+                <MdIcons.MdAddCircle />
+              </AddButton>
+            </FlexRow>
+          </TitleDiv>
+          {updateActive ? (
+            <UpdateProperty
+              EditProperty={EditProperty}
+              propertyToUpdate={propertyToUpdate}
+              ToggleEditOn={ToggleEditOn}
+              FetchProperties={FetchProperties}
+            />
+          ) : null}
+          <PropListContainer>
+            <>{PropertyList()}</>
+          </PropListContainer>
+          <PgButtonDiv>
+            <button onClick={HandlePrevPage} disabled={currentPage === 1}>
+              Prev 10
+            </button>
+            <button onClick={HandleNextPage}>Next 10</button>
+          </PgButtonDiv>
+        </Container>
+      </>
+    </>
   );
 };
 

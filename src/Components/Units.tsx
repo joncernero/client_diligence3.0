@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import APIURL from '../Utilities/Environments';
 import styled from 'styled-components';
 import { Unit } from '../Types/Unit';
@@ -12,15 +12,26 @@ import { CSVLink, CSVDownload } from 'react-csv';
 import ScrollToTop from './ScrollToTop';
 import * as FaIcons from 'react-icons/fa';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import UpdateUnit from './UpdateUnit';
 
-const Units = () => {
+const Units: React.FC = () => {
   const [allUnits, setAllUnits] = useState([]);
   const [propName, setPropName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [updateActive, setUpdateActive] = useState(false);
   const [addUnitActive, setAddUnitActive] = useState(false);
   const [addVariantActive, setAddVariantActive] = useState(false);
+  const [unitToUpdate, setUnitToUpdate] = useState({
+    prop_id: 0,
+    unit_id: 0,
+    unit_no: '',
+    unit_type: '',
+    bldg_no: '',
+    isstandard: false,
+  });
+
   const { id } = useParams();
+  let navigate = useNavigate();
 
   const FetchAllUnits = async () => {
     try {
@@ -38,7 +49,6 @@ const Units = () => {
       const propertyInfo = await response.json();
       setPropName(propertyInfo.data.property.prop_name);
       setAllUnits(propertyInfo.data.propertyUnits);
-      console.log(propertyInfo);
     } catch (err) {
       console.log(err);
     }
@@ -59,17 +69,45 @@ const Units = () => {
     window.scrollTo(0, 0);
   };
 
-  const ToggleUpdateOn = () => {
+  const ToggleUnitUpdateOn = () => {
     setUpdateActive(!updateActive);
+    window.scroll(0, 0);
+  };
+
+  const EditUnit = (unit: Unit) => {
+    setUnitToUpdate(unit);
   };
 
   const UnitList = () => {
-    return allUnits.map((unit: Unit, index) => (
+    return allUnits.map((unit: Unit, index: number) => (
       <tr key={index}>
-        <TD>{!unit.unit_no ? '-' : unit.unit_no}</TD>
-        <TD>{unit.unit_type}</TD>
-        <TD>{unit.bldg_no}</TD>
-        <TD>
+        <TD
+          onClick={() => {
+            ToggleUnitUpdateOn();
+            EditUnit(unit);
+          }}>
+          {!unit.unit_no ? 0 : unit.unit_no}
+        </TD>
+        <TD
+          onClick={() => {
+            ToggleUnitUpdateOn();
+            EditUnit(unit);
+          }}>
+          {unit.unit_type}
+        </TD>
+        <TD
+          onClick={() => {
+            ToggleUnitUpdateOn();
+            EditUnit(unit);
+          }}>
+          {unit.bldg_no}
+        </TD>
+        <TD
+          onClick={() => {
+            ToggleUnitUpdateOn();
+            EditUnit(unit);
+          }}>
+          {' '}
           {!unit.isstandard ? (
             <AiFillCloseCircle className='red' />
           ) : (
@@ -88,6 +126,8 @@ const Units = () => {
   };
 
   const csvData = allUnits.map((unit: Unit) => ({
+    Prop_Id: unit.prop_id,
+    Unit_Id: unit.unit_id,
     Unit_No: !unit.unit_no ? '-' : unit.unit_no,
     Type: unit.unit_type,
     Bldg_No: unit.bldg_no,
@@ -106,7 +146,9 @@ const Units = () => {
       <UnitContainer>
         <div className='header'>
           <FlexRow>
-            <h3>Units: {`${propName}`}</h3>
+            <h3 onClick={() => navigate(`/properties/${id}`)}>
+              Units: {`${propName}`}
+            </h3>
             <div>
               {addUnitActive ? (
                 <AddUnits
@@ -132,6 +174,14 @@ const Units = () => {
         {addVariantActive ? (
           <AddVariants ToggleAddVariant={ToggleAddVariant} />
         ) : null}
+        {updateActive ? (
+          <UpdateUnit
+            EditUnit={EditUnit}
+            ToggleUnitUpdateOn={ToggleUnitUpdateOn}
+            FetchAllUnits={FetchAllUnits}
+            unitToUpdate={unitToUpdate}
+          />
+        ) : null}
         <table>
           <TableHeader>
             <tr>
@@ -142,6 +192,7 @@ const Units = () => {
               <th>Variant</th>
             </tr>
           </TableHeader>
+
           <TableBody>{UnitList()}</TableBody>
         </table>
       </UnitContainer>
@@ -166,6 +217,22 @@ export const UnitContainer = styled.div`
 
   table {
     width: 100%;
+  }
+
+  .update {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    input {
+      border: none;
+      width: 50px;
+      z-index: 50;
+    }
+
+    button {
+      z-index: 50;
+    }
   }
 `;
 
@@ -249,5 +316,18 @@ export const TD = styled.td`
 
   .green {
     color: #7fbe7f;
+  }
+
+  form {
+    display: flex;
+    input {
+      background: inherit;
+      border: none;
+      width: 20px;
+    }
+    button {
+      background: light green;
+      width: 20px;
+    }
   }
 `;

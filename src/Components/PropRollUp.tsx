@@ -70,15 +70,15 @@ const PropRollUp = () => {
   ];
 
   const options = {
-    legend: { position: 'bottom' },
+    legend: { position: 'bottom', textStyle: { fontSize: '12' } },
     pieHole: 0.1,
     is3D: false,
     width: 220,
-    height: 210,
-    chartArea: { width: '90%', height: '75%' },
+    height: 220,
+    chartArea: { width: '90%', height: '80%' },
     pieSliceText: 'none',
     pieSliceTextStyle: {
-      fontSize: '12',
+      fontSize: '20px',
       color: '#000000',
     },
     colors: ['9aa9b8', '#b3bfc9'],
@@ -117,6 +117,7 @@ const PropRollUp = () => {
             <h5>2 x 2: {`${twoByTwo.length} Units`}</h5>
             <h5>3 x 2: {`${threeByTwo.length} Units`}</h5>
             <h5>Other: {`${other.length} Units`}</h5>
+            <h3>Total Units: {`${units.length}`}</h3>
           </UnitTally>
         </ChartCon>
       ) : (
@@ -155,6 +156,7 @@ export const ChartCon = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: row;
+  margin-top: 5px;
 `;
 
 export const UnitTally = styled.div`
@@ -163,14 +165,15 @@ export const UnitTally = styled.div`
   justify-content: center;
   align-items: left;
   color: #000000;
+  gap: 2px;
 
   h3 {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
   }
   h5 {
     font-weight: normal;
-    font-size: 13px;
+    font-size: 14px;
   }
 `;
 

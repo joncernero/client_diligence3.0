@@ -9,6 +9,7 @@ import { FlexRow } from '../Styles/FlexRowDiv';
 import { CSVLink, CSVDownload } from 'react-csv';
 import ScrollToTop from './ScrollToTop';
 import * as FaIcons from 'react-icons/fa';
+import UpdateVariant from './UpdateVariant';
 
 const Variants = () => {
   const [allVariants, setAllVariants] = useState([]);
@@ -16,7 +17,16 @@ const Variants = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [updateActive, setUpdateActive] = useState(false);
   const [addVariantActive, setAddVariantActive] = useState(false);
+  const [variantToUpdate, setVariantToUpdate] = useState({
+    variant_id: 0,
+    prop_id: 0,
+    unit_no: '',
+    bldg_no: '',
+    variant_item: '',
+    variant_note: '',
+  });
   const { id } = useParams();
+  let navigate = useNavigate();
 
   const FetchAllVariants = async () => {
     try {
@@ -49,8 +59,13 @@ const Variants = () => {
     window.scrollTo(0, 0);
   };
 
-  const ToggleUpdateOn = () => {
+  const ToggleVariantUpdateOn = () => {
     setUpdateActive(!updateActive);
+    window.scroll(0, 0);
+  };
+
+  const EditVariant = (variant: Variant) => {
+    setVariantToUpdate(variant);
   };
 
   const VariantList = () => {
@@ -58,13 +73,20 @@ const Variants = () => {
       <tr key={index}>
         <TD>{variant.unit_no}</TD>
         <TD>{variant.bldg_no}</TD>
-        <TD>{variant.variant_item}</TD>
         <TD>{variant.variant_note}</TD>
+        <TD
+          onClick={() => {
+            ToggleVariantUpdateOn();
+            EditVariant(variant);
+          }}>
+          <MdIcons.MdUpdate />
+        </TD>
       </tr>
     ));
   };
 
   const csvData = allVariants.map((variant: Variant) => ({
+    Prop_Id: variant.prop_id,
     Unit_No: variant.unit_no,
     Bldg_No: variant.bldg_no,
     Variant_Item: variant.variant_item,
@@ -83,7 +105,9 @@ const Variants = () => {
       <VariantContainer>
         <div className='header'>
           <FlexRow>
-            <h3>Variants: {`${propName}`}</h3>
+            <h3 onClick={() => navigate(`/properties/${id}`)}>
+              Variants: {`${propName}`}
+            </h3>
             <div>
               <Button
                 onClick={() => {
@@ -100,13 +124,23 @@ const Variants = () => {
             </div>
           </FlexRow>
         </div>
+
+        {updateActive ? (
+          <UpdateVariant
+            ToggleVariantUpdateOn={ToggleVariantUpdateOn}
+            EditVariant={EditVariant}
+            FetchAllVariants={FetchAllVariants}
+            variantToUpdate={variantToUpdate}
+          />
+        ) : null}
+
         <table>
           <TableHeader>
             <tr>
               <th>Unit#</th>
               <th>Bldg.</th>
-              <th>Item</th>
               <th>Note</th>
+              <th>Update</th>
             </tr>
           </TableHeader>
           <TableBody>{VariantList()}</TableBody>
@@ -159,16 +193,16 @@ export const TableHeader = styled.thead`
     width: 100%;
     th {
       &:nth-child(1) {
-        width: 15%;
+        width: 10%;
       }
       &:nth-child(2) {
         width: 10%;
       }
       &:nth-child(3) {
-        width: 40%;
+        width: 30%;
       }
       &:nth-child(4) {
-        width: 40%;
+        width: 10%;
       }
 
       /* &:last-child {
@@ -210,7 +244,7 @@ export const TD = styled.td`
   font-weight: bold;
 
   &:nth-child(1) {
-    width: 15%;
+    width: 10%;
   }
 
   &:nth-child(2) {
@@ -218,9 +252,10 @@ export const TD = styled.td`
   }
 
   &:nth-child(3) {
-    width: 40%;
+    width: 30%;
   }
   &:nth-child(4) {
-    width: 40%;
+    width: 10%;
+    font-size: 17px;
   }
 `;

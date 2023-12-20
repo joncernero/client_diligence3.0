@@ -4,6 +4,8 @@ export const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
+  position: fixed;
+  max-width: 100%;
   position: absolute;
   z-index: 75;
   top: 50%;
@@ -43,17 +45,15 @@ export const StyledModal = styled.div`
   }
 
   select {
-    box-sizing: border-box;
+    font-size: 12px;
     padding: 0.5em;
     color: #283747;
     background: #eaecee;
     width: 100%;
     margin-bottom: 1em;
 
-    option {
-      text-align: center;
-      background-color: #ffffff;
-      font-weight: bold;
+    & select-items {
+      font-size: 25px;
     }
   }
 

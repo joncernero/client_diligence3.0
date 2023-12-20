@@ -47,22 +47,22 @@ const AddVariants = (props: Props) => {
   };
 
   const scopeItemArray = [
-    '0100 - General Requirements',
-    '0200 - Site Works',
-    '0300 - Concrete',
-    '0400 - Masonry',
-    '0500 - Metals',
-    '0600 - Wood and Plastics',
-    '0700 - Thermal and Moisture',
-    '0800 - Doors and Windows',
-    '0900 - Finishes',
-    '1000 - Specialties',
-    '1100 - Equipment',
-    '1200 - Furnishings',
-    '1300 - Special Construction',
-    '1400 - Conveying Systems',
-    '1500 - Mechanical/Plumbing',
-    '1600 - Electrical',
+    '0100GR',
+    '0200STWR',
+    '0300CON',
+    '0400MAS',
+    '0500MET',
+    '0600WOPL',
+    '0700THM',
+    '0800DW',
+    '0900FIN',
+    '1000SPEC',
+    '1100EQUIP',
+    '1200FURN',
+    '1300SPC',
+    '1400ELV',
+    '1500MECH',
+    '1600ELC',
   ];
 
   return (
